@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Results for "{{ query }}"</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="results-page">
+
+    <div class="results-header">
+        <h1>Results for &ldquo;{{ query }}&rdquo;</h1>
+        <p class="count">{{ images | length }} image(s) downloaded</p>
+        <a href="/" class="back-btn">← New Search</a>
+    </div>
+
+    {% if images %}
+    <div class="image-grid">
+        {% for img in images %}
+        <div class="image-card">
+            <a href="{{ url_for('static', filename=img.static_path) }}" target="_blank">
+                <img
+                    src="{{ url_for('static', filename=img.static_path) }}"
+                    alt="Image {{ img.index + 1 }}"
+                    loading="lazy"
+                    onerror="this.closest('.image-card').style.display='none'"
+                >
+            </a>
+            <div class="image-meta">
+                <span class="img-number">#{{ img.index + 1 }}</span>
+                <a class="img-source" href="{{ img.url }}" target="_blank" title="{{ img.url }}">Source ↗</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-results">No images were downloaded. Please try a different search term.</p>
+    {% endif %}
+
+</div>
+{% endblock %}
